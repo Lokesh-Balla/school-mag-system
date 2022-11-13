@@ -1,18 +1,47 @@
 package main
 
 import (
-  "net/http"
+	"jwt-authentication-golang/controllers"
+	"jwt-authentication-golang/database"
+	"jwt-authentication-golang/middlewares"
 
-  "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
-func main() {
-  r := gin.Default()
-  r.GET("/ping", func(c *gin.Context) {
-    c.JSON(http.StatusOK, gin.H{
-      "message": "pong",
-    })
-  })
+// const (
+// 	username = "root"
+// 	password = ""
+// 	hostname = "localhost:3306"
+// 	dbname   = "jwt_demo"
+// )
 
-  r.Run("0.0.0.0:8080") // listen and serve on 0.0.0.0:8080
+//	func dsn(dbName string) string {
+//		return fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, dbName)
+//	}
+func main() {
+	// var da string
+	// da = "root:root@tcp(localhost:3306)/jwt_demo?parseTime=true"
+	// fmt.Println(da)
+	// database.Connect(dsn(""))
+
+	database.Connect("root:@tcp(localhost:3306)/jwt_demo?parseTime=true")
+	database.Migrate()
+	// Initialize Router
+	router := initRouter()
+	router.Run(":8180")
+
+}
+
+func initRouter() *gin.Engine {
+	router := gin.Default()
+	api := router.Group("/api")
+	{
+		api.POST("/token", controllers.GenerateToken)
+		api.POST("/user/register", controllers.RegisterUser)
+		secured := api.Group("/secured").Use(middlewares.Auth())
+		{
+			secured.GET("/ping", controllers.Ping)
+		}
+	}
+	return router
 }

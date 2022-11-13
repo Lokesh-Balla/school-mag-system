@@ -1,0 +1,26 @@
+secured access with jwt:
+
+curl --location --request GET 'http://localhost:8181/api/secured/ping' \
+--header 'authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaXZhcm1hMyIsImVtYWlsIjoic2FpMTNAZ28uY29tIiwiZXhwIjoxNjYzMTMyNjM1fQ.AGvgYQOgHd-F-z2fCcXR99D8LlbSCifCrEtBQuj33vI'
+
+generate jwt token:
+
+curl --location --request POST 'http://localhost:8181/api/token' \
+--header 'Authorization: Basic Og==' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "sai13@go.com",
+    "password": "123465789"
+}'
+
+
+register user:
+
+curl --location --request POST 'http://localhost:8181/api/user/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "varma",
+    "username": "saivarma3",
+    "email": "sai13@go.com",
+    "password": "123465789"
+}'
