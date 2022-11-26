@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<h1>Test</h1>
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    /* Full-width input fields */
+    input[type=text],
+    input[type=password],
+    input[type=email] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus,
+    input[type=email]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+    }
+
+    /* Set a style for all buttons */
+    button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    button:hover {
+        opacity: 1;
+    }
+
+    /* Extra styles for the cancel button */
+    .cancelbtn {
+        padding: 14px 20px;
+        background-color: #f44336;
+    }
+
+    /* Float cancel and signup buttons and add an equal width */
+    .cancelbtn,
+    .signupbtn {
+        float: left;
+        width: 50%;
+    }
+
+    /* Add padding to container elements */
+    .container {
+        padding: 16px;
+    }
+
+    /* Clear floats */
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    /* Change styles for cancel button and signup button on extra small screens */
+    @media screen and (max-width: 300px) {
+
+        .cancelbtn,
+        .signupbtn {
+            width: 100%;
+        }
+    }
+</style>
+
+<form>
+    <div class="container">
+        <div class="login-box">
+            <h1>Sign Up</h1>
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+
+            <label for="Name"><b>Name</b></label>
+            <input type="text" placeholder="Enter Name" name="Name">
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email">
+            <label for="username"><b>username</b></label>
+            <input type="text" placeholder="Enter username" name="username">
+            <label for="password"><b>password</b></label>
+            <input type="text" placeholder="Enter password" name="password">
+            <button type="button" class="cancelbtn">Cancel</button>
+            <button type="submit" onclick="signUpFunction()" class="signupbtn">Sign Up</button>
+
+        </div>
+        <div class="login-box">
+            <h1>log in</h1>
+            <hr>
+            <!-- <input type="text" name="loginusername" placeholder="username"> -->
+            <input type="email" name="loginmail" placeholder="log">
+            <input type="password" name="userpassword" placeholder="password">
+            <button type="submit" onclick="logInFunction()" class="loginbtn">Login</button>
+
+        </div>
+    </div>
+</form>
+
+<script>
+    function signUpFunction() {
+        var xhttp = new XMLHttpRequest();
+        jsonSending = {
+            "name": document.getElementsByName("Name")[0].value,
+            "username": document.getElementsByName("username")[0].value,
+            "email": document.getElementsByName("email")[0].value,
+            "password": document.getElementsByName("password")[0].value
+        }
+        console.log(jsonSending)
+
+        xhttp.open("POST", "http://localhost:8181/api/user/register", false);
+        // xmlhttp.setRequestHeader("Content-Type", "application/json");
+        // xhttp.withCredentials = true;
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState === 4) {
+                console.log(xhttp.status);
+                console.log(xhttp.responseText);
+            }
+        };
+
+        xhttp.send(JSON.stringify(jsonSending));
+
+    };
+    function logInFunction() {
+        var xhttp2 = new XMLHttpRequest();
+        loginjsonSending = {
+            "email": document.getElementsByName("loginmail")[0].value,
+            "password": document.getElementsByName("userpassword")[0].value
+        }
+        console.log(loginjsonSending)
+        xhttp2.open("POST", "http://localhost:8181/api/token", false);
+        // xhttp2.setRequestHeader("Content-Type", "application/json");
+        // xhttp2.setRequestHeader("Authorization", "Basic");
+        // xhttp2.withCredentials = true;
+        xhttp2.onreadystatechange = function () {
+            if (xhttp2.readyState === 4) {
+                console.log(xhttp2.status);
+                console.log(xhttp2.responseText);
+                var jsonResponse = xhttp2.response;
+                var a = xhttp2.responseText;
+
+                const b = JSON.parse(a);
+                // console.log(b.token)
+                var token = b.token
+                console.log(token)
+                document.cookie = token;
+                if (token != "") {
+                    
+                    alert("LOGIN SUCCESS")
+                }
+
+
+            }
+        };
+
+        xhttp2.send(JSON.stringify(loginjsonSending));
+
+
+
+    };
+</script>
+
+</html>

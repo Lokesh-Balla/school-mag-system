@@ -10,6 +10,7 @@ import (
 
 func RegisterUser(context *gin.Context) {
 	var user models.User
+	context.Header("Access-Control-Allow-Origin", "*")
 	if err := context.ShouldBindJSON(&user); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		context.Abort()

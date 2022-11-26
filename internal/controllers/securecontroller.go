@@ -7,5 +7,6 @@ import (
 )
 
 func Ping(context *gin.Context) {
+	context.Header("Access-Control-Allow-Origin", "*")
 	context.JSON(http.StatusOK, gin.H{"message": "pong"})
 }

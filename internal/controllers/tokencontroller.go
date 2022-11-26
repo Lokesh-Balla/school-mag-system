@@ -17,6 +17,7 @@ type TokenRequest struct {
 func GenerateToken(context *gin.Context) {
 	var request TokenRequest
 	var user models.User
+	context.Header("Access-Control-Allow-Origin", "*")
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		context.Abort()
